@@ -1,3 +1,4 @@
+import axios from 'axios';
 export const fetchPhotosByQuery = searchQuery => {
   const searchParams = new URLSearchParams({
     key: '48265193-8ac6160565acb44bbb7dfb3fe',

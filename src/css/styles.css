@@ -1,0 +1,162 @@
+@import 'simplelightbox/dist/simple-lightbox.min.css';
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  color: #434455;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+ul,
+ol {
+  list-style-type: none;
+  padding-left: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+}
+img {
+  display: block;
+  max-width: 100%;
+}
+/* ================================= */
+.input-search {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.input-field {
+  border: 1px solid #808080;
+  border-radius: 4px;
+  width: 272px;
+  height: 40px;
+  margin-right: 8px;
+  outline: none;
+  padding: 0 10px;
+}
+.btn {
+  border-radius: 8px;
+  padding: 8px 16px;
+  width: 91px;
+  height: 40px;
+  background-color: #4e75ff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: #fff;
+  border: none;
+}
+.btn:hover {
+  background-color: #6c8cff;
+}
+.input-field:hover,
+.input-field:focus {
+  border-color: #000000;
+}
+.input-field:active {
+  border-color: #4e75ff;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: #2e2f42;
+}
+.gallery {
+  /* max-width: 1440px; */
+
+  margin: 32px 156px;
+}
+.gallery-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  column-gap: 24px;
+  row-gap: 24px;
+  align-items: center;
+}
+
+.gallery-card {
+  border: 1px solid #808080;
+
+  /* width: 360px;
+  max-height: 200px; */
+}
+.inform-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  max-height: 40px;
+  margin-top: 10px;
+}
+.inform {
+  text-align: center;
+}
+.inform-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.33333;
+  letter-spacing: 0.04em;
+  color: #2e2f42;
+}
+.inform-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 2;
+  letter-spacing: 0.04em;
+  color: #2e2f42;
+}
+.sl-wrapper .sl-image img {
+  border-radius: 30px;
+  border: 5px solid rgb(101, 147, 245);
+}
+.sl-caption {
+  border-radius: 0 0 30px 30px;
+  border: 2px solid rgb(101, 147, 245);
+}
+
+.loader {
+  display: none; /* По умолчанию скрыт */
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 6px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* ================================= */

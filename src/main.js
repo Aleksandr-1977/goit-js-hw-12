@@ -21,6 +21,7 @@ const simpleLight = new SimpleLightbox('.gallery-list a', {
 });
 let page = 1;
 let searchQuery = '';
+
 loadMoreBtn.classList.add('is-hidden');
 const onSearchFormSubmit = async event => {
   try {
@@ -71,6 +72,11 @@ const onSearchFormSubmit = async event => {
     searchForm.reset();
     loader.style.display = 'none';
 
+    // const sizeCard = document.querySelector('.gallery-card');
+    // let card = sizeCard.getBoundingClientRect();
+    // document.addEventListener('scroll', window.scrollBy(0, window.innerHeight));
+    // console.log(card);
+
     loadMoreBtn.addEventListener('click', loadMoreBtnClick);
     simpleLight.refresh();
   } catch (err) {
@@ -93,6 +99,15 @@ const loadMoreBtnClick = async event => {
     const galleryTemplate = data.hits.map(el => createGalleryCard(el)).join('');
     galleryElem.insertAdjacentHTML('beforeend', galleryTemplate);
     loader.style.display = 'none';
+
+    const sizeCard = document.querySelector('.gallery-card');
+    const cardHeight = sizeCard.getBoundingClientRect().height;
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: 'smooth',
+    });
+
+    simpleLight.refresh();
   } catch (err) {
     if (err.message === 'Network Error') {
       iziToast.error({

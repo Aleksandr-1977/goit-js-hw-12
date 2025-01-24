@@ -9,6 +9,7 @@ import { fetchPhotosByQuery } from './js/pixabay-api';
 const searchForm = document.querySelector('.input-search');
 const galleryElem = document.querySelector('.gallery-list');
 const loader = document.querySelector('.loader');
+const loadMoreBtn = document.querySelector('.btn-load');
 
 loader.style.display = 'none';
 
@@ -18,54 +19,88 @@ const simpleLight = new SimpleLightbox('.gallery-list a', {
   captionDelay: 250,
   scrollZoom: false,
 });
+let page = 1;
+let searchQuery = '';
+loadMoreBtn.classList.add('is-hidden');
+const onSearchFormSubmit = async event => {
+  try {
+    event.preventDefault();
+    searchQuery = event.currentTarget.elements.input.value.trim();
+    if (searchQuery === '') {
+      iziToast.error({
+        title: 'Ошибка',
+        message: 'Поле должно быть заполнено!',
+        position: 'bottomRight',
+        closeOnClick: true,
+      });
+      return;
+    }
+    galleryElem.innerHTML = '';
+    loader.style.display = 'flex';
+    page = 1;
+    const { data } = await fetchPhotosByQuery(searchQuery, page);
 
-const onSearchFormSubmit = event => {
-  event.preventDefault();
-  const searchData = event.currentTarget.elements.input.value.trim();
-  if (searchData === '') {
-    iziToast.error({
-      title: 'Ошибка',
-      message: 'Поле должно быть заполнено!',
-      position: 'bottomRight',
-      closeOnClick: true,
-    });
-    return;
-  }
-  loader.style.display = 'flex';
+    if (data.hits.length === 0) {
+      iziToast.error({
+        title: 'Ошибка',
+        message:
+          'Извините, нет результатов, соответствующих вашему поисковому запросу. Попробуйте еще раз!',
+        position: 'bottomRight',
+        closeOnClick: true,
+      });
 
-  fetchPhotosByQuery(searchData)
-    .then(data => {
-      if (data.hits.length === 0) {
-        iziToast.error({
-          title: 'Ошибка',
-          message:
-            'Извините, нет результатов, соответствующих вашему поисковому запросу. Попробуйте еще раз!',
-          position: 'bottomRight',
-          closeOnClick: true,
-        });
-
-        galleryElem.innerHTML = '';
-        searchForm.reset();
-        loader.style.display = 'none';
-        return;
-      }
-      const galleryTemplate = data.hits
-        .map(el => createGalleryCard(el))
-        .join('');
-      galleryElem.innerHTML = galleryTemplate;
-
-      simpleLight.refresh();
+      galleryElem.innerHTML = '';
+      searchForm.reset();
       loader.style.display = 'none';
-    })
-    .catch(error => {
-      if (error.mesage === '404') {
-        iziToast.error({
-          title: 'Ошибка',
-          message: 'Ошибка загрузки изображений. Попробуйте снова.',
-          position: 'bottomRight',
-          closeOnClick: true,
-        });
-      }
-    });
+      return;
+    }
+    if (data.totalHits > 1) {
+      loadMoreBtn.classList.remove('is-hidden');
+    }
+    if (page >= data.totalHits) {
+      iziToast.error({
+        color: 'blue',
+        title: '',
+        message: 'Сожалеем, но больше нет информации по Вашему запросу!',
+        position: 'topRight',
+        closeOnClick: true,
+      });
+    }
+    const galleryTemplate = data.hits.map(el => createGalleryCard(el)).join('');
+    galleryElem.innerHTML = galleryTemplate;
+    searchForm.reset();
+    loader.style.display = 'none';
+
+    loadMoreBtn.addEventListener('click', loadMoreBtnClick);
+    simpleLight.refresh();
+  } catch (err) {
+    if (err.message === 'Network Error') {
+      iziToast.error({
+        title: 'Ошибка',
+        message: 'Ошибка загрузки изображений. Попробуйте снова.',
+        position: 'bottomRight',
+        closeOnClick: true,
+      });
+    }
+  }
 };
 searchForm.addEventListener('submit', onSearchFormSubmit);
+const loadMoreBtnClick = async event => {
+  loader.style.display = 'flex';
+  try {
+    page++;
+    const { data } = await fetchPhotosByQuery(searchQuery, page);
+    const galleryTemplate = data.hits.map(el => createGalleryCard(el)).join('');
+    galleryElem.insertAdjacentHTML('beforeend', galleryTemplate);
+    loader.style.display = 'none';
+  } catch (err) {
+    if (err.message === 'Network Error') {
+      iziToast.error({
+        title: 'Ошибка',
+        message: 'Ошибка загрузки изображений. Попробуйте снова.',
+        position: 'bottomRight',
+        closeOnClick: true,
+      });
+    }
+  }
+};

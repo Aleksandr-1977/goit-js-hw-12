@@ -71,12 +71,6 @@ const onSearchFormSubmit = async event => {
     galleryElem.innerHTML = galleryTemplate;
     searchForm.reset();
     loader.style.display = 'none';
-
-    // const sizeCard = document.querySelector('.gallery-card');
-    // let card = sizeCard.getBoundingClientRect();
-    // document.addEventListener('scroll', window.scrollBy(0, window.innerHeight));
-    // console.log(card);
-
     loadMoreBtn.addEventListener('click', loadMoreBtnClick);
     simpleLight.refresh();
   } catch (err) {

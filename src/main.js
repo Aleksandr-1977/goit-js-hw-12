@@ -49,16 +49,15 @@ const onSearchFormSubmit = async event => {
         position: 'bottomRight',
         closeOnClick: true,
       });
-
       galleryElem.innerHTML = '';
       searchForm.reset();
       loader.style.display = 'none';
+      loadMoreBtn.classList.add('is-hidden');
       return;
     }
-    if (data.totalHits > 1) {
-      loadMoreBtn.classList.remove('is-hidden');
-    }
-    if (page >= data.totalHits) {
+    loadMoreBtn.classList.remove('is-hidden');
+
+    if (page >= Math.ceil(data.totalHits / data.hits.length)) {
       iziToast.error({
         color: 'blue',
         title: '',
@@ -66,7 +65,17 @@ const onSearchFormSubmit = async event => {
         position: 'topRight',
         closeOnClick: true,
       });
+      loadMoreBtn.classList.add('is-hidden');
     }
+    // if (page >= data.totalHits) {
+    //   iziToast.error({
+    //     color: 'blue',
+    //     title: '',
+    //     message: 'Сожалеем, но больше нет информации по Вашему запросу!',
+    //     position: 'topRight',
+    //     closeOnClick: true,
+    //   });
+    // }
     const galleryTemplate = data.hits.map(el => createGalleryCard(el)).join('');
     galleryElem.innerHTML = galleryTemplate;
     searchForm.reset();
@@ -90,6 +99,18 @@ const loadMoreBtnClick = async event => {
   try {
     page++;
     const { data } = await fetchPhotosByQuery(searchQuery, page);
+    if (data.hits.length === 0) {
+      iziToast.error({
+        color: 'blue',
+        title: '',
+        message: 'Сожалеем, но больше нет информации по Вашему запросу!',
+        position: 'topRight',
+        closeOnClick: true,
+      });
+      loadMoreBtn.classList.add('is-hidden');
+      loader.style.display = 'none';
+      return;
+    }
     const galleryTemplate = data.hits.map(el => createGalleryCard(el)).join('');
     galleryElem.insertAdjacentHTML('beforeend', galleryTemplate);
     loader.style.display = 'none';

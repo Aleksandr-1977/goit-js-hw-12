@@ -55,17 +55,18 @@ const onSearchFormSubmit = async event => {
       loadMoreBtn.classList.add('is-hidden');
       return;
     }
-    loadMoreBtn.classList.remove('is-hidden');
-
-    if (page >= Math.ceil(data.totalHits / data.hits.length)) {
+    const totalPages = Math.ceil(data.totalHits / 15);
+    if (totalPages <= 1) {
+      loadMoreBtn.classList.add('is-hidden');
       iziToast.error({
         color: 'blue',
         title: '',
         message: 'Сожалеем, но больше нет информации по Вашему запросу!',
-        position: 'topRight',
+        position: 'bottomRight',
         closeOnClick: true,
       });
-      loadMoreBtn.classList.add('is-hidden');
+    } else {
+      loadMoreBtn.classList.remove('is-hidden');
     }
     const galleryTemplate = data.hits.map(el => createGalleryCard(el)).join('');
     galleryElem.innerHTML = galleryTemplate;
@@ -76,8 +77,8 @@ const onSearchFormSubmit = async event => {
   } catch (err) {
     if (err.message === 'Network Error') {
       iziToast.error({
-        title: 'Ошибка',
-        message: 'Ошибка загрузки изображений. Попробуйте снова.',
+        title: 'Ошибка!',
+        message: 'Сервер не отвечает. Попробуйте позже.',
         position: 'bottomRight',
         closeOnClick: true,
       });
@@ -90,20 +91,20 @@ const loadMoreBtnClick = async event => {
   try {
     page++;
     const { data } = await fetchPhotosByQuery(searchQuery, page);
-    if (data.hits.length === 0) {
+    const totalPages = Math.ceil(data.totalHits / 15);
+    const galleryTemplate = data.hits.map(el => createGalleryCard(el)).join('');
+    galleryElem.insertAdjacentHTML('beforeend', galleryTemplate);
+    if (page >= totalPages) {
+      loadMoreBtn.classList.add('is-hidden');
       iziToast.error({
         color: 'blue',
         title: '',
-        message: 'Сожалеем, но больше нет информации по Вашему запросу!',
-        position: 'topRight',
+        message:
+          'Это вся доступная информация на нащем ресурсе по Вашему запросу.',
+        position: 'bottomRight',
         closeOnClick: true,
       });
-      loadMoreBtn.classList.add('is-hidden');
-      loader.style.display = 'none';
-      return;
     }
-    const galleryTemplate = data.hits.map(el => createGalleryCard(el)).join('');
-    galleryElem.insertAdjacentHTML('beforeend', galleryTemplate);
     loader.style.display = 'none';
 
     const sizeCard = document.querySelector('.gallery-card');
@@ -115,10 +116,10 @@ const loadMoreBtnClick = async event => {
 
     simpleLight.refresh();
   } catch (err) {
-    if (err.message === 'Network Error') {
+    if (err.message === '404') {
       iziToast.error({
-        title: 'Ошибка',
-        message: 'Ошибка загрузки изображений. Попробуйте снова.',
+        title: 'Ошибка!',
+        message: 'Сервер не отвечает. Попробуйте позже.',
         position: 'bottomRight',
         closeOnClick: true,
       });

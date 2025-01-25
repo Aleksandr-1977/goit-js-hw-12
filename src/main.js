@@ -67,15 +67,6 @@ const onSearchFormSubmit = async event => {
       });
       loadMoreBtn.classList.add('is-hidden');
     }
-    // if (page >= data.totalHits) {
-    //   iziToast.error({
-    //     color: 'blue',
-    //     title: '',
-    //     message: 'Сожалеем, но больше нет информации по Вашему запросу!',
-    //     position: 'topRight',
-    //     closeOnClick: true,
-    //   });
-    // }
     const galleryTemplate = data.hits.map(el => createGalleryCard(el)).join('');
     galleryElem.innerHTML = galleryTemplate;
     searchForm.reset();

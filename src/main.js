@@ -84,7 +84,7 @@ const onSearchFormSubmit = async event => {
   }
 };
 searchForm.addEventListener('submit', onSearchFormSubmit);
-const loadMoreBtnClick = async event => {
+const loadMoreBtnClick = async () => {
   loader.style.display = 'flex';
   try {
     page++;

@@ -1,8 +1,6 @@
 import SimpleLightbox from 'simplelightbox';
-
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-
 import { createGalleryCard } from './js/render-functions';
 import { fetchPhotosByQuery } from './js/pixabay-api';
 
@@ -100,7 +98,7 @@ const loadMoreBtnClick = async event => {
         color: 'blue',
         title: '',
         message:
-          'Это вся доступная информация на нащем ресурсе по Вашему запросу.',
+          'Это вся доступная информация на нашем ресурсе по Вашему запросу.',
         position: 'bottomRight',
         closeOnClick: true,
       });
